@@ -51,7 +51,7 @@ Now visiting `example.com/page/example_segment` will point to the `Categories` r
 It will default to the relation name.
 
 ### Templating
-Take a page type `NameSpace/CategoryPage` that extends `Page`.
+Take a page type `NameSpace/CategoryPage` that extends `Page` with the url segment of `page`.
 When visiting `example.com/page/Categories` the templates that could be used are
 ```php
 [
@@ -61,9 +61,10 @@ When visiting `example.com/page/Categories` the templates that could be used are
     "Page",
 ]
 ``` 
-These will be in the `Layouts` folder, and will be passed a `Categorizations` variable that will contain the categories in the relation.
+It will always look for `ClassName_Relation`, never for the `relation_segment` for the relation.
+These should be located in the `Layouts` folder.
+ 
+When visiting a relation link the template will be passed a `Categorizations` variable that will contain the categories in the relation.
 
 When visiting `example.com/page/Categories/category` the templates will be the same as above.
 A `Categorization` variable will be added that will contain the categorization with the given URLSegment in the specified relation.
-
-
