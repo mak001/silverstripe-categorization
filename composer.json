@@ -1,0 +1,41 @@
+{
+  "name": "mak001/silverstripe-categorization",
+  "description": "SilverStripe Categorization Module. Easily allows categorization to be added to Pages and DataObjects.",
+  "keywords": [
+    "silverstripe",
+    "categorization"
+  ],
+  "type": "silverstripe-vendormodule",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Matthew Koerber",
+      "email": "matthew@matthewkoerber.com",
+      "homepage": "http://matthewkoerber.com"
+    }
+  ],
+  "require": {
+    "silverstripe/recipe-cms": "^1.0",
+    "silverstripe/vendor-plugin": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/PHPUnit": "^5.7",
+    "squizlabs/php_codesniffer": "*"
+  },
+  "config": {
+    "process-timeout": 600
+  },
+  "autoload": {
+    "psr-4": {
+      "MAK001\\Categorization\\": "src/",
+      "MAK001\\Categorization\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
