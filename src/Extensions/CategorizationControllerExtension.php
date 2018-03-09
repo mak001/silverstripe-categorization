@@ -79,7 +79,7 @@ class CategorizationControllerExtension extends Extension
             }
 
             return $this->owner->customise(ArrayList::create([
-                'Categorizations' => $relation,
+                'Categorizations' => $this->owner->{$relationName}(),
             ]))->renderWith([
                 'type' => 'Layout',
                 $this->getTemplates($relationName),

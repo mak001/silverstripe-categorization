@@ -49,3 +49,21 @@ private static $relation_segments = [
 Now visiting `example.com/page/example_segment` will point to the `Categories` relation, and `example.com/page/Categories` will not be found.
 
 It will default to the relation name.
+
+### Templating
+Take a page type `NameSpace/CategoryPage` that extends `Page`.
+When visiting `example.com/page/Categories` the templates that could be used are
+```php
+[
+    "NameSpace/CategoryPage_Categories",
+    "Page_Categories",
+    "NameSpace/CategoryPage",
+    "Page",
+]
+``` 
+These will be in the `Layouts` folder, and will be passed a `Categorizations` variable that will contain the categories in the relation.
+
+When visiting `example.com/page/Categories/category` the templates will be the same as above.
+A `Categorization` variable will be added that will contain the categorization with the given URLSegment in the specified relation.
+
+
