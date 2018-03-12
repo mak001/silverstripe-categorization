@@ -30,7 +30,7 @@ Category:
 ```
 
 ### CategorizationControllerExtension
-Allows a page to show category relations. This will pick up `has_one`, `has_many`, and `many_many` relations if the relation class has the `CategorizationExtension` applied.
+Allows a page to show category relations. This will pick up `has_many` and `many_many` relations if the relation class has the `CategorizationExtension` applied.
 
 ```yml
 CategoryPageController:

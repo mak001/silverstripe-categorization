@@ -43,7 +43,6 @@ class CategorizationControllerExtension extends Extension
         /** @var DataObject $dataRecord */
         $dataRecord = $this->owner->dataRecord;
         $relations = array_merge(
-            $dataRecord::config()->get('has_one'),
             $dataRecord::config()->get('has_many'),
             $dataRecord::config()->get('many_many')
         );
