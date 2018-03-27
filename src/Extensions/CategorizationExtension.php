@@ -55,21 +55,44 @@ class CategorizationExtension extends DataExtension
     }
 
     /**
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     *
      */
-    public function onBeforeWrite() {
+    public function validURLSegment()
+    {
+        $filtered = DataObject::get($this->owner->getClassName())->filter([
+            'URLSegment' => $this->owner->URLSegment,
+        ])->exclude([
+            'ID' => $this->owner->ID,
+        ])->column('URLSegment');
+
+        // If any of the extensions return `0` consider the segment invalid
+        $extensionResponses = array_filter(
+            (array)$this->owner->extend('augmentValidURLSegment'),
+            function ($response) {
+                return !is_null($response);
+            }
+        );
+        if ($extensionResponses) {
+            return min($extensionResponses);
+        }
+
+        return !$filtered;
+    }
+
+    /**
+     *
+     */
+    public function onBeforeWrite()
+    {
         // Sanitize the URLSegment field
         $filter = URLSegmentFilter::create();
         $segment = $filter->filter($this->owner->URLSegment);
         $this->owner->URLSegment = $segment;
 
-        $filtered = DataObject::get($this->owner->getClassName())->filter([
-            'URLSegment' => $segment,
-        ]);
-        $count = $filtered->Count();
-
-        if ($count > 1 || ($count === 1 && $this->owner->ID !== $filtered->first()->ID)) {
-            $this->owner->URLSegment .= '-' . $count;
+        $count = 1;
+        while (!$this->owner->validURLSegment()) {
+            $this->owner->URLSegment = preg_replace('/-[0-9]+$/', null, $this->owner->URLSegment) . '-' . $count;
+            $count++;
         }
     }
 }

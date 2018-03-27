@@ -1,4 +1,6 @@
 # SilverStripe Categorization
+[![Build Status](https://travis-ci.org/mak001/silverstripe-categorization.svg?branch=master)](https://travis-ci.org/mak001/silverstripe-categorization)
+[![codecov](https://codecov.io/gh/mak001/silverstripe-categorization/branch/master/graph/badge.svg)](https://codecov.io/gh/mak001/silverstripe-categorization)
 
 Easily add categorization to Pages or DataObjects and allow categories to be accessed by a nice url.
 

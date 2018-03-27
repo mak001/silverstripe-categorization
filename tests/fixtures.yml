@@ -1,0 +1,9 @@
+Mak001\Categorization\Tests\CategorizationPage:
+  categorizationPage:
+    Title: Categorization Page
+    URLSegment: categorization-page
+
+Mak001\Categorization\Tests\CategorizationObject:
+  categorization:
+    Title: Categorization
+    URLSegment: categorization

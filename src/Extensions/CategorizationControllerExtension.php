@@ -70,7 +70,7 @@ class CategorizationControllerExtension extends Extension
                         'Categorization' => $categorization,
                     ]))->renderWith([
                         'type' => 'Layout',
-                        $this->getTemplates($relationName),
+                        $this->getCategorizationTemplates($relationName),
                     ]);
                 }
 
@@ -81,7 +81,7 @@ class CategorizationControllerExtension extends Extension
                 'Categorizations' => $this->owner->{$relationName}(),
             ]))->renderWith([
                 'type' => 'Layout',
-                $this->getTemplates($relationName),
+                $this->getCategorizationTemplates($relationName),
             ]);
         }
 
@@ -94,11 +94,11 @@ class CategorizationControllerExtension extends Extension
      *
      * @return array
      */
-    public function getTemplates($relationName, $relation = true)
+    public function getCategorizationTemplates($relationName, $relation = true)
     {
         $templates = [];
 
-        foreach ($this->getTemplate() as $value) {
+        foreach ($this->getCategorizationTemplate() as $value) {
             if (strpos($value, 'Extension') !== false) {
                 continue;
             }
@@ -111,14 +111,14 @@ class CategorizationControllerExtension extends Extension
         }
 
         return $relation ?
-            array_merge($templates, $this->getTemplates($relationName, false)) :
+            array_merge($templates, $this->getCategorizationTemplates($relationName, false)) :
             $templates;
     }
 
     /**
      * @return \Generator
      */
-    public function getTemplate()
+    public function getCategorizationTemplate()
     {
         $classes = ClassInfo::ancestry($this->owner->ClassName);
         $classes[static::class] = static::class;
