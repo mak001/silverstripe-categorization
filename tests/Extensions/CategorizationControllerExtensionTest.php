@@ -10,6 +10,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\View\SSViewer;
 use SilverStripe\View\ViewableData;
 
 /**
@@ -44,6 +45,21 @@ class CategorizationControllerExtensionTest extends FunctionalTest
     protected static $use_draft_site = true;
 
     /**
+     *
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        // Use the simple theme in tests (for page template)
+        SSViewer::set_themes([
+            '$public',
+            'simple',
+            '$default',
+        ]);
+    }
+
+    /**
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function testGetCategorizationTemplates()
@@ -70,6 +86,7 @@ class CategorizationControllerExtensionTest extends FunctionalTest
 
     public function testDisplayCategorization()
     {
+        print_r(SSViewer::get_themes());
         /** @var CategorizationPage $categorizationPage */
         $categorizationPage = $this->objFromFixture(CategorizationPage::class, 'categorizationPage');
         /** @var CategorizationObject $categorizationObject */
@@ -94,5 +111,4 @@ class CategorizationControllerExtensionTest extends FunctionalTest
         $page = $this->get($controller->Link('Categories/categorization'));
         $this->assertEquals(200, $page->getStatusCode());
     }
-
 }

@@ -44,8 +44,10 @@ class CategorizationExtension extends DataExtension
         $urlsegment = SiteTreeURLSegmentField::create("URLSegment", $this->owner->fieldLabel('URLSegment'))
             ->setURLPrefix('');
 
-        $helpText = _t('SiteTreeURLSegmentField.HelpChars',
-            ' Special characters are automatically converted or removed.');
+        $helpText = _t(
+            'SiteTreeURLSegmentField.HelpChars',
+            ' Special characters are automatically converted or removed.'
+        );
         $urlsegment->setHelpText($helpText);
 
         $fields->addFieldsToTab('Root.Main', [

@@ -13,8 +13,10 @@ use SilverStripe\Dev\TestOnly;
 class CategorizationPageController extends PageController implements TestOnly
 {
 
+    /**
+     * @var array
+     */
     private static $extensions = [
         CategorizationControllerExtension::class,
     ];
-
 }

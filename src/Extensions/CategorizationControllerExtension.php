@@ -52,7 +52,7 @@ class CategorizationControllerExtension extends Extension
         $relationName = null;
         if ($key = array_search($relationSegment, $relationSegments)) {
             $relationName = $key;
-        } else if (isset($relations[$relationSegment])) {
+        } elseif (isset($relations[$relationSegment])) {
             $relationName = $relationSegment;
         }
 

@@ -35,5 +35,4 @@ class CategorizationObject extends DataObject implements TestOnly
     {
         return 'label';
     }
-
 }
