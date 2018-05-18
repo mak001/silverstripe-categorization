@@ -68,7 +68,7 @@ class CategorizationControllerExtension extends Extension
         }
 
         if ($relation !== null && $relation::has_extension(CategorizationExtension::class)) {
-
+            // sets up the viewer object (otherwise it renders the layout as the full page)
             $viewer = new SSViewer($this->owner->getViewerTemplates());
             $templates = $this->getCategorizationTemplates($relationName);
             $templates['type'] = 'Layout';
