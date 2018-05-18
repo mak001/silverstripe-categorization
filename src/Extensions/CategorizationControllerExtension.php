@@ -5,13 +5,17 @@ namespace Mak001\Categorization\Extensions;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\ClassInfo;
-use \SilverStripe\Core\Extension;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ThemeResourceLoader;
 
 /**
  * Class CategorizationControllerExtension
  * @package Mak001\Categorization\Extensions
+ *
+ * @property \SilverStripe\CMS\Controllers\ContentController $owner
  */
 class CategorizationControllerExtension extends Extension
 {
@@ -34,6 +38,7 @@ class CategorizationControllerExtension extends Extension
      * @param HTTPRequest $request
      *
      * @return \SilverStripe\ORM\FieldType\DBHTMLText|string
+     * @throws \SilverStripe\Control\HTTPResponse_Exception
      */
     public function displayCategorization(HTTPRequest $request)
     {
@@ -63,26 +68,33 @@ class CategorizationControllerExtension extends Extension
         }
 
         if ($relation !== null && $relation::has_extension(CategorizationExtension::class)) {
+
+            $viewer = new SSViewer($this->owner->getViewerTemplates());
+            $templates = $this->getCategorizationTemplates($relationName);
+            $templates['type'] = 'Layout';
+            $viewer->setTemplateFile('Layout', ThemeResourceLoader::inst()->findTemplate(
+                $templates,
+                SSViewer::get_themes()
+            ));
+
             if ($categorizationSegment) {
                 $categorization = $this->owner->{$relationName}()->find('URLSegment', $categorizationSegment);
                 if ($categorization) {
-                    return $this->owner->customise(ArrayList::create([
-                        'Categorization' => $categorization,
-                    ]))->renderWith([
-                        'type' => 'Layout',
-                        $this->getCategorizationTemplates($relationName),
-                    ]);
+                    return $viewer->process($this->owner->customise(
+                        ArrayData::create([
+                            'Categorization' => $categorization,
+                        ])
+                    ));
                 }
 
                 return $this->owner->httpError(404, $categorizationSegment . ' was not found');
             }
 
-            return $this->owner->customise(ArrayList::create([
-                'Categorizations' => $this->owner->{$relationName}(),
-            ]))->renderWith([
-                'type' => 'Layout',
-                $this->getCategorizationTemplates($relationName),
-            ]);
+            return $viewer->process($this->owner->customise(
+                ArrayData::create([
+                    'Categorizations' => $this->owner->{$relationName}(),
+                ])
+            ));
         }
 
         return $this->owner->httpError(404, $relationName . ' was not found');
