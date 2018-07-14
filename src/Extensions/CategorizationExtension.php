@@ -62,7 +62,8 @@ class CategorizationExtension extends DataExtension
     /**
      * @return string
      */
-    public function getDefaultURLSegment() {
+    public function getDefaultURLSegment()
+    {
         return 'categorization';
     }
 

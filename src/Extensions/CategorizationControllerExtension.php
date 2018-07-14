@@ -51,7 +51,7 @@ class CategorizationControllerExtension extends Extension
             $dataRecord::config()->get('has_many'),
             $dataRecord::config()->get('many_many'),
             $dataRecord::config()->get('belongs_many_many'),
-            $dataRecord::config()->get('external_relation')
+            $dataRecord::config()->get('external_relation') ?: []
         );
         $relationSegments = $dataRecord::config()->get('relation_segments') ?: [];
 
