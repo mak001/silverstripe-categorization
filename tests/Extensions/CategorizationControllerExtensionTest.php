@@ -71,8 +71,8 @@ class CategorizationControllerExtensionTest extends FunctionalTest
         $templates = $controller->getCategorizationTemplates('Categories', 'Category');
         $this->assertEquals([
             'Mak001\Categorization\Tests\CategorizationPage_Categories_Category',
-            'Mak001\Categorization\Tests\CategorizationPage_Categories',
             'Page_Categories_Category',
+            'Mak001\Categorization\Tests\CategorizationPage_Categories',
             'Page_Categories',
             'Mak001\Categorization\Tests\CategorizationPage',
             'Page',

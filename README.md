@@ -88,8 +88,8 @@ when visiting `example.com/page/Categories/category` the templates that can be u
 ```php
 [
     "NameSpace/CategoryPage_Categories_Category",
-    "NameSpace/CategoryPage_Categories",
     "Page_Categories_Category",
+    "NameSpace/CategoryPage_Categories",
     "Page_Categories",
     "NameSpace/CategoryPage",
     "Page",
