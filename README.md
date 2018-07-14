@@ -72,7 +72,7 @@ It will default to the relation name.
 
 ### Templating
 Take a page type `NameSpace/CategoryPage` that extends `Page` with the url segment of `page`.
-When visiting `example.com/page/Categories` the templates that could be used are
+When visiting `example.com/page/Categories` the templates that can be used are
 ```php
 [
     "NameSpace/CategoryPage_Categories",
@@ -82,9 +82,25 @@ When visiting `example.com/page/Categories` the templates that could be used are
 ]
 ``` 
 It will always look for `ClassName_Relation`, never for the `relation_segment` for the relation.
+
+With a categorization object with a `singular_name` of `Category` and a `url_segment` of `category`, 
+when visiting `example.com/page/Categories/category` the templates that can be used are
+```php
+[
+    "NameSpace/CategoryPage_Categories_Category",
+    "Page_Categories_Category",
+    "NameSpace/CategoryPage_Categories",
+    "Page_Categories",
+    "NameSpace/CategoryPage",
+    "Page",
+]
+```
 These should be located in the `Layouts` folder.
  
 When visiting a relation link the template will be passed a `Categorizations` variable that will contain the categories in the relation.
 
 When visiting `example.com/page/Categories/category` the templates will be the same as above.
 A `Categorization` variable will be added that will contain the categorization with the given URLSegment in the specified relation.
+
+#### Non generic variables
+Setting `$use_generic_variables` to true will use the relation names and the categorization `singlur_name` in place of the generic `Categorizations` and `Categorization` variable names respectivly.
