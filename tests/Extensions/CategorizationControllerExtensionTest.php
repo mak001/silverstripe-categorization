@@ -68,6 +68,16 @@ class CategorizationControllerExtensionTest extends FunctionalTest
         /** @var CategorizationPageController $controller */
         $controller = CategorizationPageController::create($page);
 
+        $templates = $controller->getCategorizationTemplates('Categories', 'Category');
+        $this->assertEquals([
+            'Mak001\Categorization\Tests\CategorizationPage_Categories_Category',
+            'Mak001\Categorization\Tests\CategorizationPage_Categories',
+            'Page_Categories_Category',
+            'Page_Categories',
+            'Mak001\Categorization\Tests\CategorizationPage',
+            'Page',
+        ], $templates);
+
         $templates = $controller->getCategorizationTemplates('Categories');
         $this->assertEquals([
             'Mak001\Categorization\Tests\CategorizationPage_Categories',
@@ -76,7 +86,7 @@ class CategorizationControllerExtensionTest extends FunctionalTest
             'Page',
         ], $templates);
 
-        $templates = $controller->getCategorizationTemplates('Categories', false);
+        $templates = $controller->getCategorizationTemplates();
         $this->assertEquals([
             'Mak001\Categorization\Tests\CategorizationPage',
             'Page',
@@ -86,7 +96,6 @@ class CategorizationControllerExtensionTest extends FunctionalTest
 
     public function testDisplayCategorization()
     {
-        print_r(SSViewer::get_themes());
         /** @var CategorizationPage $categorizationPage */
         $categorizationPage = $this->objFromFixture(CategorizationPage::class, 'categorizationPage');
         /** @var CategorizationObject $categorizationObject */
