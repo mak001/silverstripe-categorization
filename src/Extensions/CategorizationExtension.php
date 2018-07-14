@@ -2,12 +2,14 @@
 
 namespace Mak001\Categorization\Extensions;
 
+use SebastianBergmann\CodeCoverage\Report\Text;
 use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\View\Requirements;
 
 /**
  * Class CategorizationExtension
@@ -41,8 +43,10 @@ class CategorizationExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
+        Requirements::javascript('silverstripe/cms: client/dist/js/bundle.js');
         $urlsegment = SiteTreeURLSegmentField::create("URLSegment", $this->owner->fieldLabel('URLSegment'))
-            ->setURLPrefix('');
+            ->setDefaultURL($this->owner->getDefaultURLSegment())
+            ->setURLPrefix(' ');
 
         $helpText = _t(
             'SiteTreeURLSegmentField.HelpChars',
@@ -50,14 +54,20 @@ class CategorizationExtension extends DataExtension
         );
         $urlsegment->setHelpText($helpText);
 
-        $fields->addFieldsToTab('Root.Main', [
-            TextField::create('Title'),
-            $urlsegment,
-        ]);
+        $tab = $fields->findOrMakeTab('Root.Main');
+        $tab->unshift($urlsegment);
+        $tab->unshift(TextField::create('Title'));
     }
 
     /**
-     *
+     * @return string
+     */
+    public function getDefaultURLSegment() {
+        return 'categorization';
+    }
+
+    /**
+     * @return bool|mixed
      */
     public function validURLSegment()
     {
