@@ -32,7 +32,7 @@ Category:
 ```
 
 ### CategorizationControllerExtension
-Allows a page to show category relations. This will pick up `has_many` and `many_many` relations if the relation class has the `CategorizationExtension` applied.
+Allows a page to show category relations. This will pick up `has_many`, `many_many`, and `belongs_many_many` relations if the relation class has the `CategorizationExtension` applied.
 
 ```yml
 CategoryPageController:
@@ -40,6 +40,24 @@ CategoryPageController:
     - Mak001\Categorization\Extensions\CategorizationControllerExtension
 ```
 
+#### External Relations
+External relations can also be made viewable.
+This is useful when children of a holder page have the relations, but the holder should have the viewable relations.
+This can be done with 
+```php
+private static $external_relation = [
+    'External' => RelationClass::class,
+];
+
+public function External()
+{
+    return RelationClass::get();
+}
+```
+All external relations require a method named the same as the relation name.
+
+
+#### Relation url segments
 Relation segments can be different than the relation name. An example of the is the `Categories` relation mapping to `categories`.
 Simply add 
 ```php
