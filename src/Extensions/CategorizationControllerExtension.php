@@ -21,6 +21,11 @@ class CategorizationControllerExtension extends Extension
 {
 
     /**
+     * @var bool
+     */
+    private static $use_generic_variables = true;
+
+    /**
      * @var array
      */
     private static $allowed_actions = [
@@ -69,32 +74,27 @@ class CategorizationControllerExtension extends Extension
             $relation = $relations[$relationName];
         }
 
+        $viewer = new SSViewer($this->owner->getViewerTemplates());
+        return $this->renderRelation($viewer, $relation, $relationName, $categorizationSegment);
+    }
+
+    /**
+     * @param SSViewer $viewer
+     * @param DataObject $relation
+     * @param string $relationName
+     */
+    public function renderRelation($viewer, $relation, $relationName, $categorizationSegment)
+    {
         if ($relation !== null && $relation::has_extension(CategorizationExtension::class)) {
-            // sets up the viewer object (otherwise it renders the layout as the full page)
-            $viewer = new SSViewer($this->owner->getViewerTemplates());
-            $templates = $this->getCategorizationTemplates($relationName);
-            $templates['type'] = 'Layout';
-            $viewer->setTemplateFile('Layout', ThemeResourceLoader::inst()->findTemplate(
-                $templates,
-                SSViewer::get_themes()
-            ));
-
             if ($categorizationSegment) {
-                $categorization = $this->owner->{$relationName}()->find('URLSegment', $categorizationSegment);
-                if ($categorization) {
-                    return $viewer->process($this->owner->customise(
-                        ArrayData::create([
-                            'Categorization' => $categorization,
-                        ])
-                    ));
-                }
-
-                return $this->owner->httpError(404, $categorizationSegment . ' was not found');
+                return $this->renderCategorization($viewer, $relationName, $categorizationSegment);
             }
 
+            $this->setTemplates($viewer, $relationName);
+            $dataName = $this->owner->config()->get('use_generic_variables') ? 'Categorizations' : $relationName;
             return $viewer->process($this->owner->customise(
                 ArrayData::create([
-                    'Categorizations' => $this->owner->{$relationName}(),
+                    $dataName => $this->owner->{$relationName}(),
                 ])
             ));
         }
@@ -103,12 +103,52 @@ class CategorizationControllerExtension extends Extension
     }
 
     /**
+     * @param SSViewer $viewer
      * @param string $relationName
-     * @param bool $relation
+     * @param string $categorizationSegment
+     */
+    public function renderCategorization($viewer, $relationName, $categorizationSegment)
+    {
+        /** @var DataObject $categorization*/
+        $categorization = $this->owner->{$relationName}()->find('URLSegment', $categorizationSegment);
+
+        if ($categorization) {
+            $singularName = $categorization->config()->get('singular_name');
+            $this->setTemplates($viewer, $relationName, $singularName);
+            $dataName = $this->owner->config()->get('use_generic_variables') ? 'Categorization' : $singularName;
+            return $viewer->process($this->owner->customise(
+                ArrayData::create([
+                    $dataName => $categorization,
+                ])
+            ));
+        }
+
+        return $this->owner->httpError(404, $categorizationSegment . ' was not found');
+    }
+
+    /**
+     * sets up the viewer object (otherwise it renders the layout as the full page)
      *
+     * @param SSViewer $viewer
+     * @param string|bool $relationName
+     * @param string|bool $singleName
+     */
+    public function setTemplates($viewer, $relationName = false, $singleName = false)
+    {
+        $templates = $this->getCategorizationTemplates($relationName, $singleName);
+        $templates['type'] = 'Layout';
+        $viewer->setTemplateFile('Layout', ThemeResourceLoader::inst()->findTemplate(
+            $templates,
+            SSViewer::get_themes()
+        ));
+    }
+
+    /**
+     * @param string|bool $relationName
+     * @param stirng|bool $singleName
      * @return array
      */
-    public function getCategorizationTemplates($relationName, $relation = true)
+    public function getCategorizationTemplates($relationName = false, $singleName = false)
     {
         $templates = [];
 
@@ -121,12 +161,24 @@ class CategorizationControllerExtension extends Extension
                 break;
             }
 
-            $templates[] = $relation ? $value . '_' . $relationName : $value;
+            if ($relationName) {
+                if ($singleName) {
+                    $templates[] = "{$value}_{$relationName}_{$singleName}";
+                } else {
+                    $templates[] = "{$value}_{$relationName}";
+                }
+            } else {
+                $templates[] = $value;
+            }
         }
 
-        return $relation ?
-            array_merge($templates, $this->getCategorizationTemplates($relationName, false)) :
-            $templates;
+        if ($relationName) {
+            if ($singleName) {
+                return array_merge($templates, $this->getCategorizationTemplates($relationName));
+            }
+            return array_merge($templates, $this->getCategorizationTemplates(false));
+        }
+        return $templates;
     }
 
     /**
