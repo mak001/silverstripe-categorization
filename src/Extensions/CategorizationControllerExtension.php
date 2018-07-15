@@ -21,11 +21,6 @@ class CategorizationControllerExtension extends Extension
 {
 
     /**
-     * @var bool
-     */
-    private static $use_generic_variables = true;
-
-    /**
      * @var array
      */
     private static $allowed_actions = [
@@ -91,7 +86,7 @@ class CategorizationControllerExtension extends Extension
             }
 
             $this->setTemplates($viewer, $relationName);
-            $dataName = $this->owner->config()->get('use_generic_variables') ? 'Categorizations' : $relationName;
+            $dataName = $this->owner->config()->get('use_alternative_variables') ? $relationName : 'Categorizations';
             return $viewer->process($this->owner->customise(
                 ArrayData::create([
                     $dataName => $this->owner->{$relationName}(),
@@ -115,7 +110,7 @@ class CategorizationControllerExtension extends Extension
         if ($categorization) {
             $singularName = $categorization->config()->get('singular_name');
             $this->setTemplates($viewer, $relationName, $singularName);
-            $dataName = $this->owner->config()->get('use_generic_variables') ? 'Categorization' : $singularName;
+            $dataName = $this->owner->config()->get('use_alternative_variables') ? $singularName: 'Categorization';
             return $viewer->process($this->owner->customise(
                 ArrayData::create([
                     $dataName => $categorization,
