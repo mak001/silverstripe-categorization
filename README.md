@@ -103,4 +103,4 @@ When visiting `example.com/page/Categories/category` the templates will be the s
 A `Categorization` variable will be added that will contain the categorization with the given URLSegment in the specified relation.
 
 #### Non generic variables
-Setting `$use_generic_variables` to true will use the relation names and the categorization `singlur_name` in place of the generic `Categorizations` and `Categorization` variable names respectivly.
+Setting `$use_alternative_variables` to true on the controller will use the relation names and the categorization `$singlur_name` in place of the generic `Categorizations` and `Categorization` variable names respectivly.
