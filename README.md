@@ -106,3 +106,7 @@ When visiting either a relation link or a categorization object the template wil
 
 #### Non generic variables
 Setting `$use_alternative_variables` to true on the controller will use the relation names and the categorization `$singlur_name` in place of the generic `Categorizations` and `Categorization` variable names respectivly.
+
+### Modifying the relation lists
+Modify the lists passed to the template using the generic `modifyCategorizationList($list, $request)` extension point. THis will apply to all lists.
+To have more fine tuned controll over specific relation lists use `modify{$relationName}List()` replacing `{$relationName}` with the name of the relation.

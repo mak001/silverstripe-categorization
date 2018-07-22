@@ -87,9 +87,15 @@ class CategorizationControllerExtension extends Extension
 
             $this->setTemplates($viewer, $relationName);
             $dataName = $this->owner->config()->get('use_alternative_variables') ? $relationName : 'Categorizations';
+            $list = $this->owner->{$relationName}();
+
+            $request = $this->owner->getRequest();
+            $this->owner->extend("modifyCategorizationList", $list, $request);
+            $this->owner->extend("modify{$relationName}List", $list, $request);
+
             return $viewer->process($this->owner->customise(
                 ArrayData::create([
-                    $dataName => $this->owner->{$relationName}(),
+                    $dataName => $list,
                     'RelationName' => $relationName,
                 ])
             ));
