@@ -102,5 +102,7 @@ When visiting a relation link the template will be passed a `Categorizations` va
 When visiting `example.com/page/Categories/category` the templates will be the same as above.
 A `Categorization` variable will be added that will contain the categorization with the given URLSegment in the specified relation.
 
+When visiting either a relation link or a categorization object the template will be passed a `RelationName` variable that denotes what relation is currently being viewed.
+
 #### Non generic variables
 Setting `$use_alternative_variables` to true on the controller will use the relation names and the categorization `$singlur_name` in place of the generic `Categorizations` and `Categorization` variable names respectivly.
