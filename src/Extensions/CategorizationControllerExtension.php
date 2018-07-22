@@ -90,6 +90,7 @@ class CategorizationControllerExtension extends Extension
             return $viewer->process($this->owner->customise(
                 ArrayData::create([
                     $dataName => $this->owner->{$relationName}(),
+                    'RelationName' => $relationName,
                 ])
             ));
         }
@@ -110,10 +111,11 @@ class CategorizationControllerExtension extends Extension
         if ($categorization) {
             $singularName = $categorization->config()->get('singular_name');
             $this->setTemplates($viewer, $relationName, $singularName);
-            $dataName = $this->owner->config()->get('use_alternative_variables') ? $singularName: 'Categorization';
+            $dataName = $this->owner->config()->get('use_alternative_variables') ? $singularName : 'Categorization';
             return $viewer->process($this->owner->customise(
                 ArrayData::create([
                     $dataName => $categorization,
+                    'RelationName' => $relationName,
                 ])
             ));
         }
